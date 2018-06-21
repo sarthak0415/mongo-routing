@@ -1,7 +1,7 @@
 require 'json'
 require 'pp'
 require 'mongo'
-file = File.read('networkx_graph_json_data_iiit.txt')
+file = File.read('agra_india.txt')
 graph_json = JSON.parse(file)
 
 nodes_array = graph_json["nodes"]
@@ -48,7 +48,7 @@ nodes = nodes_hash.values
 client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'test')
 db = client.database
 new_collection_number = Time.now.to_s.split(' ').join('-')
-new_collection_name = "nodes" + '_' + new_collection_number
+new_collection_name = "agra"
 nodes_collection = client[new_collection_name]
 
 result = nodes_collection.delete_many()
