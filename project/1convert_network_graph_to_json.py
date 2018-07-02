@@ -3,7 +3,7 @@ from OSMParser import read_osm
 from networkx.readwrite import json_graph
 import json
 
-dataset_name = 'iiit'
+dataset_name = 'magarpatta'
 
 def get_adjacency_list(networkx_graph, networkx_graph_json_data):
 
