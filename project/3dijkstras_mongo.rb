@@ -42,9 +42,7 @@ def get_vertices(nodes_collection, percentage)
     return node_ids.shuffle.first(needed_size.to_i)
 end
 
-def run_tests(percentage)
-    dataset_name = 'iiit'
-    
+def run_tests(dataset_name, percentage)
     client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'test')
     nodes_collection = client[dataset_name]
 
@@ -60,5 +58,12 @@ def run_tests(percentage)
             end
         end
     end
+
+    # sources_vertices.zip(dest_vertices).each do |source, dest|
+    #     time += Benchmark.realtime do
+    #         dijkstra(nodes_collection, source, dest)
+    #     end
+    # end
+    
     return time
 end
