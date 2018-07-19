@@ -11,15 +11,21 @@ def dijkstra(nodes_collection, source_node_id, destination_node_id)
     visited[source_node_id] = true
     shortest_distances[source_node_id] = 0
 
+    ##loading the data in-memory
+    #network_data = {}
+    #nodes_collection.find.each{|doc| network_data[doc["node_id"]] = doc}
+
     while pq.size != 0
         current_node_id = pq.pop
         visited[current_node_id] = true
-        current_node = nodes_collection.find( { node_id: current_node_id } ).first
+        current_node = nodes_collection.find( { node_id: current_node_id } ).first #querying each time for a doc
+        #current_node = network_data[current_node_id] #loading the data in-memory
         edges = current_node[:connects_to]
         if edges.size > 0
             edges.each do |edge|
                 temp_destination_node_id = edge[:target]
                 weight = edge[:weight]
+                puts temp_destination_node_id, weight
                 if !visited[temp_destination_node_id] and (shortest_distances[temp_destination_node_id] || INFINITY) > shortest_distances[current_node_id] + weight
                     shortest_distances[temp_destination_node_id] = shortest_distances[current_node_id] + weight
                     previous[temp_destination_node_id] = current_node_id
@@ -49,15 +55,32 @@ def run_tests(dataset_name, percentage)
     sources_vertices = get_vertices(nodes_collection, percentage)
     dest_vertices = get_vertices(nodes_collection, percentage)
 
-    time = 0
-    sources_vertices.each do |source|
-        dest_vertices.each do |dest|
-            #puts source, dest
-            time += Benchmark.realtime do
-                dijkstra(nodes_collection, source, dest)
-            end
-        end
+    sources_vertices_file_name = "#{dataset_name}_#{percentage}.txt"
+    dest_vertices_file_name = "#{dataset_name}_#{percentage}.txt"
+
+
+    #File.new(sources_vertices_file_name, "w+")
+    File.open(sources_vertices_file_name, "w+") do |f|
+        #sources_vertices.each { |element| f.puts(element) }
+        f.write(sources_vertices) 
     end
+
+    #File.new(dest_vertices_file_name, "w+")
+    File.open(dest_vertices_file_name, "w+") do |f|
+        #dest_vertices.each { |element| f.puts(element) }
+        f.write(dest_vertices)
+    end
+
+    time = 0
+
+    # sources_vertices.each do |source|
+    #     dest_vertices.each do |dest|
+    #         #puts source, dest
+    #         time += Benchmark.realtime do
+    #             dijkstra(nodes_collection, source, dest)
+    #         end
+    #     end
+    # end
 
     # sources_vertices.zip(dest_vertices).each do |source, dest|
     #     time += Benchmark.realtime do

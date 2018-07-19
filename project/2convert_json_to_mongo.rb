@@ -2,7 +2,7 @@ require 'json'
 require 'pp'
 require 'mongo'
 
-dataset_name = 'magarpatta'
+dataset_name = 'test'
 
 input_file_name = dataset_name + '.json'
 file = File.read(input_file_name)
